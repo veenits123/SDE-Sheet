@@ -35,49 +35,61 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+//tle :(
+// class Solution {
+// public:
+// 	string getPermutation(int n, int k) {
+// 		string s = "";
+// 		for (int i = 1; i <= n; i++)
+// 			s += (i + '0');
+// 		vector <string> data;
+// 		generatePermutation(s, 0, n - 1, data);
+// 		sort(all(data));
+// 		string ans = data[k - 1];
+// 		return ans;
+// 	}
+// 	void generatePermutation(string s, int l, int r, vector <string>& data) {
+// 		if (l == r) {
+// 			data.pb(s);
+// 			return ;
+// 		}
+// 		for (int i = l; i <= r; i++) {
+// 			swap(s[i], s[l]);
+// 			generatePermutation(s, l + 1, r, data);
+// 			swap(s[i], s[l]);
+// 		}
+// 	}
+// };
+
 class Solution {
 public:
-	vector<vector<string>> partition(string s) {
-		vector <string> temp;
-		vector <vector<string>> ans;
-		helper(s, 0, ans, temp);
+	string getPermutation(int n, int k) {
+		vector <int> numbers;
+		int fact = 1;
+		for (int i = 1; i < n; i++) {
+			fact *= i;
+			numbers.push_back(i);
+		}
+		numbers.push_back(n);
+		string ans = "";
+		k--;
+		while (true) {
+			ans += to_string(numbers[k / fact]);
+			numbers.erase(numbers.begin() + (k / fact));
+			if (numbers.size() == 0)
+				break;
+			k %= fact;
+			fact /= numbers.size();
+		}
 		return ans;
-	}
-
-	void helper(string s, int index, vector <vector<string>>& ans, vector <string>& temp) {
-		if (index == sz(s)) {
-			ans.pb(temp);
-			return ;
-		}
-		for (int i = index; i < sz(s); i++) {
-			if (isPallindrome(s, index, i)) {
-				temp.pb(s.substr(index, i - index + 1));
-				helper(s, i + 1, ans, temp);
-				temp.pop_back();
-			}
-		}
-	}
-
-	bool isPallindrome(string s, int i, int j) {
-		while (i <= j) {
-			if (s[i++] != s[j--])
-				return false;
-		}
-		return true;
 	}
 };
 
 void solve() {
 
-	string s; cin >> s;
+	int n, k; cin >> n >> k;
 
-	auto ans = Solution().partition(s);
-
-	for (auto x : ans) {
-		for (auto y : x)
-			cout << y << " ";
-		cout << endl;
-	}
+	cout << Solution().getPermutation(n, k) << endl;
 
 	return ;
 }

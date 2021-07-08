@@ -35,49 +35,49 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
-class Solution {
-public:
-	vector<vector<string>> partition(string s) {
-		vector <string> temp;
-		vector <vector<string>> ans;
-		helper(s, 0, ans, temp);
-		return ans;
+bool isPossible(int node, bool graph[101][101], int V, int color[], int col) {
+	REP(k, 0, V - 1) {
+		if (k != node && graph[k][node] == 1 && color[k] == col)
+			return false;
 	}
+	return true;
+}
 
-	void helper(string s, int index, vector <vector<string>>& ans, vector <string>& temp) {
-		if (index == sz(s)) {
-			ans.pb(temp);
-			return ;
-		}
-		for (int i = index; i < sz(s); i++) {
-			if (isPallindrome(s, index, i)) {
-				temp.pb(s.substr(index, i - index + 1));
-				helper(s, i + 1, ans, temp);
-				temp.pop_back();
-			}
-		}
-	}
-
-	bool isPallindrome(string s, int i, int j) {
-		while (i <= j) {
-			if (s[i++] != s[j--])
-				return false;
-		}
+bool helper(bool graph[101][101], int V, int node, int m, int color[]) {
+	if (node == V)
 		return true;
+	REP(col, 1, m) {
+		if (isPossible(node, graph, V, color, col)) {
+			color[node] = col;
+			if (helper(graph, V, node + 1, m, color))
+				return true;
+			color[node] = 0;
+		}
 	}
-};
+	return false;
+}
+
+bool graphColoring(bool graph[101][101], int m, int V) {
+	// your code here
+	int color[V] = {0};
+	return helper(graph, V, 0, m, color);
+}
 
 void solve() {
 
-	string s; cin >> s;
+	bool graph[101][101];
 
-	auto ans = Solution().partition(s);
+	int n, e, m; cin >> n >> e >> m;
 
-	for (auto x : ans) {
-		for (auto y : x)
-			cout << y << " ";
-		cout << endl;
+	REP(i, 0, n - 1)
+	memset(graph[i], 0, sizeof(graph[i]));
+
+	REP(i, 0, e - 1) {
+		int a, b; cin >> a >> b;
+		graph[a - 1][b - 1] = 1;
+		graph[b - 1][a - 1] = 1;
 	}
+	cout << (graphColoring(graph, m, n) ? "YES" : "NO") << endl;
 
 	return ;
 }

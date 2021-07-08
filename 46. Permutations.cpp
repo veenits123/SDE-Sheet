@@ -35,43 +35,64 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+//sc: O(n);
+// class Solution {
+// public:
+// 	vector<vector<int>> permute(vector<int>& nums) {
+// 		vector <vector<int>> ans;
+// 		vector <int> temp;
+// 		vector <int> freq(nums.size(), 0);
+// 		helper(nums, freq, temp, ans);
+// 		return ans;
+// 	}
+
+// 	void helper(vector <int>& arr, vector <int>& freq, vector <int>& temp, vector<vector<int>>& ans) {
+// 		if (temp.size() == arr.size()) {
+// 			ans.push_back(temp);
+// 			return ;
+// 		}
+// 		for (int i = 0; i < arr.size(); i++) {
+// 			if (!freq[i]) {
+// 				freq[i] = 1;
+// 				temp.push_back(arr[i]);
+// 				helper(arr, freq, temp, ans);
+// 				freq[i] = 0;
+// 				temp.pop_back();
+// 			}
+// 		}
+// 	}
+// };
+
+//sc: O(1);
 class Solution {
 public:
-	vector<vector<string>> partition(string s) {
-		vector <string> temp;
-		vector <vector<string>> ans;
-		helper(s, 0, ans, temp);
+	vector<vector<int>> permute(vector<int>& nums) {
+		vector<vector<int>> ans;
+		generatePermutation(nums, 0, ans);
 		return ans;
 	}
 
-	void helper(string s, int index, vector <vector<string>>& ans, vector <string>& temp) {
-		if (index == sz(s)) {
-			ans.pb(temp);
+	void generatePermutation(vector <int>& arr, int l, vector <vector <int>>& ans) {
+		if (l == arr.size()) {
+			ans.push_back(arr);
 			return ;
 		}
-		for (int i = index; i < sz(s); i++) {
-			if (isPallindrome(s, index, i)) {
-				temp.pb(s.substr(index, i - index + 1));
-				helper(s, i + 1, ans, temp);
-				temp.pop_back();
-			}
+		for (int i = l; i < arr.size(); i++) {
+			swap(arr[i], arr[l]);
+			generatePermutation(arr, l + 1, ans);
+			swap(arr[i], arr[l]);
 		}
-	}
-
-	bool isPallindrome(string s, int i, int j) {
-		while (i <= j) {
-			if (s[i++] != s[j--])
-				return false;
-		}
-		return true;
 	}
 };
 
 void solve() {
 
-	string s; cin >> s;
+	int n; cin >> n;
 
-	auto ans = Solution().partition(s);
+	vi arr(n);
+	REP(i, 0, n - 1) cin >> arr[i];
+
+	auto ans = Solution().permute(arr);
 
 	for (auto x : ans) {
 		for (auto y : x)
