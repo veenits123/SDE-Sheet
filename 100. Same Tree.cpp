@@ -93,7 +93,7 @@ public:
 			return false;
 		bool left = isSameTree(p->left, q->left);
 		bool right = isSameTree(p->right, q->right);
-		if (left	&& right && p->val == q->val)
+		if (left && right && p->val == q->val)
 			return true;
 		return false;
 	}

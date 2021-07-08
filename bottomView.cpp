@@ -95,7 +95,6 @@ public:
 		q.push({root, 0});
 
 		map <int, int> dis;
-		dis[0] = root->val;
 
 		while (!q.empty()) {
 			auto temp = q.front();
