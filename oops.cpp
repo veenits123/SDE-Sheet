@@ -74,6 +74,7 @@ public:
 		cout << "Company: " << Company << endl;
 		cout << "Age: " << Age << endl;
 	}
+	Employee() {}
 
 	//constructor;
 	Employee(string _name, string _company, int _age) {
@@ -92,9 +93,31 @@ public:
 		else
 			cout << Name << ", no promotion for you :)" << endl;
 	}
+
+	//polymorphism;
+	//Run Time PMM: over-riding virtual functions;
+	virtual void Work() {
+		cout << Name << " work on development, testing, ....." << endl;
+	}
+
+	//polymorphism;
+	//Compile Time PMM: overloading functions;
+	int CompileTimeFuncOveraloading(int fac) {
+		return (Age * fac);
+	}
+	//compile time function overloading;
+	int CompileTimeFuncOveraloading(int fac, int rem) {
+		return (Age * fac) / rem;
+	}
+
+	//compile time operator overloading;
+	//automatically called when '+' is used b/w two objects of "Employee";
+	string operator + (Employee b) {
+		return Name + " " + b.Name;
+	}
 };
 
-//inheritance;
+//single inheritance;
 class Developer: public Employee {
 public:
 	string ProgLanguage;
@@ -106,9 +129,19 @@ public:
 		//askForPromotion();
 		cout << Name << " fixed bugs!" << endl;
 	}
+
+	//polymorphism; //runtime;
+	void Work() {
+		cout << Name << " work on development!" << endl;
+	}
+	//compile time function overloading;
+	int CompileTimeFuncOveraloading(int fac, int rem) {
+		return (getAge() * fac) / rem;
+	}
 };
 
-class CppDeveloper: public Developer {
+//multilevel inheritance;
+class CppDeveloper: virtual public Developer {
 public:
 	string Library;
 	CppDeveloper(string _name, string _company, int _age, string _language, string _library):
@@ -118,17 +151,92 @@ public:
 	void knowsLibrary() {
 		cout << getName() << " knows " << Library << endl;
 	}
+
+	string getLibrary() {
+		return Library;
+	}
+
+	//polymorphism;
+	void Work() {
+		cout << Name << " work on C++ <3" << endl;
+	}
 };
+
+class testing: virtual public Developer {};
+
+class oops: public testing {
+public:
+	oops();
+	~oops();
+
+};
+
+//multiple inheritance;
+class MultipleInheritance: public CppDeveloper,  public testing {
+};
+
+#if 0
+class Testing {
+public:
+	string Name;
+	string Company;
+	int Age;
+
+	//it's possible ;)
+	Employee emp = Employee("John", "Google", 24);
+	Testing(string _name, int _age) {
+		Name = _name;
+		Age = emp.Age;
+		emp.Name = _name;
+	}
+	string test() {
+		return Name;
+	}
+	void print() {
+		emp.introduce();
+	}
+
+	//~Testing();
+};
+#endif
 
 void solve() {
 
-	// Developer dev = Developer("Alice", "Google", 24, "C++");
+	// Developer dev = Developer("Bob", "Google", 24, "C++");
 	// dev.fixBugs();
 	// dev.askForPromotion();
+	// dev.Work();
 
-	CppDeveloper cpp = CppDeveloper("Alice", "Google", 24, "C++", "Boost");
-	cpp.knowsLibrary();
-	cout << cpp.getName();
+	// CppDeveloper cpp = CppDeveloper("Alice", "Google", 24, "C++", "Boost");
+	// cpp.knowsLibrary();
+	// cout << cpp.getLibrary() << endl;
+	// cpp.Work();
+
+	// cpp.Work();
+	// dev.Work();
+
+	// Employee* e1 = &dev;
+	// Employee* e2 = &cpp;
+
+	// e1->Work();
+	// e2->Work();
+
+	// Testing t = Testing("Bob", 24);
+	// t.print();
+
+	Employee emp = Employee("Alice", "Google", 24);
+	// cout << emp.CompileTimeFuncOveraloading(2) << endl;
+	// cout << emp.CompileTimeFuncOveraloading(2, 2) << endl;
+
+
+	Employee emp1 = Employee("Bob", "Google", 24);
+
+	// Developer d1 = Developer("Bob", "Google", 24, "C++");
+	// Developer d2 = Developer("Alice", "Google", 24, "SQL");
+
+	// string x = d1 + d2;
+	// cout << x << endl;
+
 
 	return ;
 }
