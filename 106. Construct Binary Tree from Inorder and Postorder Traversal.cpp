@@ -86,35 +86,49 @@ void postOrder(TreeNode *root) {
 
 class Solution {
 public:
-	void flatten(TreeNode* root) {
-		if (!root)
-			return ;
-		if (!root->left && !root->right)
-			return ;
-		if (root->left) {
-			flatten(root->left);
+	TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+		int n = inorder.size();
+		int i = n - 1;
+		return build(inorder, postorder, 0, n - 1, i);
+	}
+	TreeNode* build(vector<int>& in, vector<int>& post, int start, int end, int &index) {
+		if (start > end)
+			return nullptr;
+		int cur = post[index];//inorder index;
+		index--;
+		TreeNode* root = new TreeNode(cur);
 
-			TreeNode* temp = root->right;
-			
-			root->right = root->left;
-			root->left = nullptr;
+		if (start == end)//only one node is present;
+			return root;
 
-			while (root->right) {
-				root = root->right;
-			}
-			root->right = temp;
+		int pos = findInd(in, start, end, root->val);
+
+		root->right = build(in, post, pos + 1, end, index);
+		root->left = build(in, post, start, pos - 1, index);
+
+		return root;
+	}
+	int findInd(vector<int>& in, int start, int end, int cur) {
+		for (int i = start; i <= end; i++) {
+			if (cur == in[i])
+				return i;
 		}
-		flatten(root->right);
+		return -1;
 	}
 };
 
 void solve() {
 
-	TreeNode* root = build_btree();
+	int n; cin >> n;
+	vi in(n), post(n);
+	for (int i = 0; i < n; i++)
+		cin >> in[i];
+	for (int i = 0; i < n; i++)
+		cin >> post[i];
 
-	Solution().flatten(root);
+	auto ans = Solution().buildTree(in, post);
 
-	inOrder(root);
+	inOrder(ans);
 
 	return ;
 }

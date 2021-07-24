@@ -84,37 +84,27 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
-class Solution {
-public:
-	void flatten(TreeNode* root) {
-		if (!root)
-			return ;
-		if (!root->left && !root->right)
-			return ;
-		if (root->left) {
-			flatten(root->left);
+bool check(TreeNode* root, map<int, int>& m) {
+	if (!root)
+		return false;
+	if (m[root->val])
+		return true;
+	m[root->val] = 1;
+	bool left = check(root->left, m);
+	bool right = check(root->right, m);
+	return left || right;
+}
 
-			TreeNode* temp = root->right;
-			
-			root->right = root->left;
-			root->left = nullptr;
-
-			while (root->right) {
-				root = root->right;
-			}
-			root->right = temp;
-		}
-		flatten(root->right);
-	}
-};
+bool checkDuplicates(TreeNode* root) {
+	map <int, int> m;
+	return check(root, m);
+}
 
 void solve() {
 
-	TreeNode* root = build_btree();
+	auto root = build_btree();
 
-	Solution().flatten(root);
-
-	inOrder(root);
+	cout << checkDuplicates(root);
 
 	return ;
 }
