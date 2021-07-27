@@ -37,44 +37,73 @@ const int N = 1e5 + 5;
 
 class Solution {
 public:
-	int minReorder(int n, vector<vector<int>>& connections) {
-		vector<vector<int>> graph(n);
-		vector<bool> vis(n, false);
-		map <P, int> edges;
-		int cnt = 0;
-		for (auto x : connections) {
-			int u = x[0], v = x[1];
-			edges[ {u, v}] = 1;
-			graph[u].pb(v);
-			graph[v].pb(u);
-		}
-		dfs(0, graph, vis, edges, cnt);
-		return cnt;
+	int row[5] = {0, 0, 0, 1, -1};
+	int col[5] = {0, 1, -1, 0, 0};
+
+	int minCost(vector<vector<int>>& grid) {
+		int n = grid.size();
+		int m = grid[0].size();
+
+		vector<vector<int>> dis(n, vector<int>(m, 1e9));
+
+		bfs(0, 0, grid, dis);
+		return dis[n - 1][m - 1];
 	}
-	void dfs(int src, vector<vector<int>>& graph, vector<bool>& vis,
-	         map<P, int>& edges, int &cnt) {
-		vis[src] = true;
-		for (auto to : graph[src]) {
-			if (!vis[to]) {
-				if (edges[ {src, to}]) {
-					cnt++;
+	void bfs(int sx, int sy, vector<vector<int>>& graph,
+	         vector<vector<int>>& dis) {
+		int n = graph.size();
+		int m = graph[0].size();
+
+		deque<pair<int, int>> q;
+		q.push_front({sx, sy});
+
+		dis[sx][sy] = 0;
+
+		while (!q.empty()) {
+			auto cur = q.front();
+			q.pop_front();
+			int x = cur.F;
+			int y = cur.S;
+
+			int direction = graph[x][y];
+
+			for (int i = 1; i <= 4; i++) {
+				int r = x + row[i];
+				int c = y + col[i];
+
+				int cost = (direction == i) ? 0 : 1;
+
+				if (isValid(r, c, n, m)) {
+					if (dis[r][c] > dis[x][y] + cost) {
+						dis[r][c] = dis[x][y] + cost;
+						if (cost == 0) {
+							q.push_front({r, c});
+						}
+						else {
+							q.push_back({r, c});
+						}
+					}
 				}
-				dfs(to, graph, vis, edges, cnt);
 			}
 		}
+
+	}
+	bool isValid(int r, int c, int n, int m) {
+		return (r >= 0 && c >= 0 && r < n && c < m);
 	}
 };
 
 void solve() {
 
 	int n; cin >> n;
-	vector<vector<int>> edges;
+	vector<vector<int>> graph(n, vector<int>(n));
 
-	for (int i = 0; i < n - 1; i++) {
-		int u, v; cin >> u >> v;
-		edges.pb({u, v});
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+			cin >> graph[i][j];
 	}
-	cout << Solution().minReorder(n, edges);
+
+	cout << Solution().minCost(graph);
 
 	return ;
 }

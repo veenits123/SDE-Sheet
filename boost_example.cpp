@@ -19,13 +19,14 @@ int main(int, char*[]) {
             Graph;
 
     typedef std::pair<std::size_t, std::size_t> Pair;
-    Pair edges[5] = {Pair(1, 2),
-                    Pair(2, 3),
-                    Pair(3, 4),
-                    Pair(4, 5),
-                    Pair(5, 1)
-                   
-                     };
+    Pair edges[6] = {Pair(1, 2),
+                     Pair(1, 4),
+                     Pair(2, 3),
+                     Pair(2, 5),
+                     Pair(4, 6),
+                     Pair(4, 7)
+
+                    };
 
     Graph G(10);
 

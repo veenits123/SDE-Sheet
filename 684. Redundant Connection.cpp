@@ -35,51 +35,63 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	vector<int> par;
+
+	vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+		init();
+		for (auto x : edges) {
+			int u = x[0];
+			int v = x[1];
+			if (findParent(u) != findParent(v)) {
+				unite(u, v);
+			}
+			else {
+				return {u, v};
+			}
+		}
+		return { -1, -1};
+	}
+
+	void init() {
+		par.resize(1001);
+		for (int i = 0; i <= 1000; i++) {
+			par[i] = i;
+		}
+	}
+
+	int findParent(int n) {
+		if (n == par[n])
+			return n;
+		return par[n] = findParent(par[n]);
+	}
+
+	void unite(int x, int y) {
+		int u = findParent(x);
+		int v = findParent(y);
+		if (u != v) {
+			if (u > v)
+				swap(u, v);
+			par[v] = u;
+		}
+	}
+};
+
 void solve() {
 
 	int n; cin >> n;
-	vector<vector<int>> a(n, vector<int>(5, 0));
+	vector<vector<int>> edges;
 
-	REP(i, 0, n - 1) {
-		REP(j, 0, 4)
-		cin >> a[i][j];
-	}
-	if (n == 1) {
-		cout << 1 << endl;
-		return ;
+	for (int i = 0; i < n; i++) {
+		int u, v; cin >> u >> v;
+		edges.pb({u, v});
 	}
 
-	REP(i, 0, n - 1)
-	sort(all(a[i]));
+	auto ans = Solution().findRedundantConnection(edges);
 
-	vector <int> temp;
-
-	REP(i, 0, n - 1) {
-		int sum = 0;
-		REP(j, 0, 2)
-		sum += a[i][j];
-		temp.pb(sum);
-	}
-	int ans = -1;
-
-	int min = 1e18;
-	map <int, int> mp;
-	REP(i, 0, n - 1) {
-		mp[temp[i]]++;
-		if (min > temp[i]) {
-			min = temp[i];
-			ans = i;
-		}
-	}
-	if (mp[min] > 1) {
-		cout << -1 << endl;
-		return ;
-	}
-
-	if (ans == -1)
-		cout << ans << endl;
-	else
-		cout << ans + 1 << endl;
+	for (auto x : ans)
+		cout << x << " ";
 
 	return ;
 }
@@ -94,8 +106,8 @@ int32_t main() {
 	freopen("output.txt", "w", stdout);
 #endif
 
-	int t; cin >> t; while (t--)
-		solve();
+	//int t;cin>>t;while(t--)
+	solve();
 
 	return 0;
 }

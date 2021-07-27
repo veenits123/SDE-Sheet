@@ -35,51 +35,46 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	int removeStones(vector<vector<int>>& stones) {
+		int ans = 0;
+		int n = stones.size();
+		vector<bool> vis(n, false);
+		for (int i = 0; i < n; i++) {
+			if (!vis[i]) {
+				dfs(i, vis, stones);
+				ans++;
+			}
+		}
+		ans = n - ans;
+		return ans;
+	}
+
+	void dfs(int src, vector<bool>& vis, vector<vector<int>>& edges) {
+		int x = edges[src][0];
+		int y = edges[src][1];
+		vis[src] = true;
+		for (int i = 0; i < edges.size(); i++) {
+			if (!vis[i] &&
+			        (edges[i][0] == x || edges[i][1] == y)) {
+				dfs(i, vis, edges);
+			}
+		}
+	}
+};
+
 void solve() {
 
 	int n; cin >> n;
-	vector<vector<int>> a(n, vector<int>(5, 0));
+	vector<vector<int>> edges;
 
-	REP(i, 0, n - 1) {
-		REP(j, 0, 4)
-		cin >> a[i][j];
-	}
-	if (n == 1) {
-		cout << 1 << endl;
-		return ;
+	for (int i = 0; i < n; i++) {
+		int u, v; cin >> u >> v;
+		edges.pb({u, v});
 	}
 
-	REP(i, 0, n - 1)
-	sort(all(a[i]));
-
-	vector <int> temp;
-
-	REP(i, 0, n - 1) {
-		int sum = 0;
-		REP(j, 0, 2)
-		sum += a[i][j];
-		temp.pb(sum);
-	}
-	int ans = -1;
-
-	int min = 1e18;
-	map <int, int> mp;
-	REP(i, 0, n - 1) {
-		mp[temp[i]]++;
-		if (min > temp[i]) {
-			min = temp[i];
-			ans = i;
-		}
-	}
-	if (mp[min] > 1) {
-		cout << -1 << endl;
-		return ;
-	}
-
-	if (ans == -1)
-		cout << ans << endl;
-	else
-		cout << ans + 1 << endl;
+	cout << Solution().removeStones(edges);
 
 	return ;
 }
@@ -94,8 +89,8 @@ int32_t main() {
 	freopen("output.txt", "w", stdout);
 #endif
 
-	int t; cin >> t; while (t--)
-		solve();
+	//int t;cin>>t;while(t--)
+	solve();
 
 	return 0;
 }
