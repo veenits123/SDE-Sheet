@@ -19,18 +19,8 @@ int main(int, char*[]) {
             Graph;
 
     typedef std::pair<std::size_t, std::size_t> Pair;
-    Pair edges[12] = {Pair(1, 2),
-                     Pair(1, 3),
-                     Pair(1, 4),
-                     Pair(1, 7),
-                     Pair(2, 3),
-                     Pair(2, 6),
-                     Pair(2, 7),
-                     Pair(3, 4),
-                     Pair(3, 5),
-                     Pair(3, 6),
-                     Pair(4, 5),
-                     Pair(5, 6)
+    Pair edges[2] = {Pair(1, 2),
+                     Pair(3, 4)
                     };
 
     Graph G(10);

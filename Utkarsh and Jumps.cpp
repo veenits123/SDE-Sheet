@@ -35,7 +35,28 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	double ans = 1.0;
+	double climbStairs(int n, int p) {
+		vector<double> dp(n + 1, 0.0);
+		dp[0] = 1.0;
+		dp[1] = 0.0;
+		dp[2] = p / 100.0;
+		dp[3] = 1 - (p / 100.0);
+		for (int i = 4; i <= n; i++) {
+			dp[i] += (double)(p / 100.0) * dp[i - 2] + (double)(1 - (p / 100.0)) * dp[i - 3];
+		}
+		return dp[n];
+	}
+};
+
 void solve() {
+
+	int n, p; cin >> n >> p;
+	auto ans = Solution().climbStairs(n, p);
+
+	cout << sp(ans, 6) << endl;
 
 	return ;
 }

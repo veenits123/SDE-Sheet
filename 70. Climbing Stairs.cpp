@@ -35,7 +35,35 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	vector<string> ans;
+	vector<string> climbStairs(int n, vector<int> steps) {
+		paths(n, 0, steps, "");
+		return ans;
+	}
+	void paths(int n, int i, vector<int>& steps, string curPath) {
+		if (i > n)
+			return ;
+		if (i == n) {
+			ans.pb(curPath);
+			return ;
+		}
+		for (int step = 0; step < steps.size(); step++) {
+			int curStep = i + steps[step];
+
+			paths(n, curStep, steps, curPath + to_string(steps[step]));
+		}
+	}
+};
+
 void solve() {
+
+	int n; cin >> n;
+	auto ans = Solution().climbStairs(n, {2, 3});
+
+	for (auto x : ans)
+		cout << x << endl;
 
 	return ;
 }

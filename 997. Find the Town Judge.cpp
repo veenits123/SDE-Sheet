@@ -35,7 +35,36 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	int findJudge(int n, vector<vector<int>>& trust) {
+		vector<int> outDegree(n + 1, 0);
+		vector<int> inDegree(n + 1, 0);
+
+		for (auto x : trust) {
+			int u = x[0];
+			int v = x[1];
+			inDegree[v]++;
+			outDegree[u]++;
+		}
+		for (int i = 1 ; i <= n; i++)
+			if (outDegree[i] == 0 && inDegree[i] == n - 1)//everyone trust him except himself so (n-1);
+				return i;
+		return -1;
+	}
+};
+
 void solve() {
+
+	int n; cin >> n;
+	vector<vector<int>> edges;
+
+	for (int i = 0; i < 2; i++) {
+		int u, v; cin >> u >> v;
+		edges.pb({u, v});
+	}
+
+	cout << Solution().findJudge(n, edges);
 
 	return ;
 }

@@ -74,87 +74,14 @@ void print(ListNode* head) {
 	cout << endl;
 }
 
-// class Solution {
-// public:
-// 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-// 		ListNode *dummy = new ListNode();
-// 		ListNode *cur = dummy;
-
-// 		int carry = 0;
-// 		while (l1 != nullptr && l2 != nullptr) {
-
-// 			int sum = l1->val + l2->val;
-
-// 			int base = sum + carry;
-// 			if (base >= 10)
-// 				carry = 1;
-// 			else
-// 				carry = 0;
-// 			//cout << base << endl;
-// 			base = (base >= 10) ? base % 10 : base;
-
-// 			ListNode * temp = new ListNode(base);
-
-// 			cur->next = temp;
-// 			cur = temp;
-// 			l1 = l1->next;
-// 			l2 = l2->next;
-// 		}
-// 		while (l1 != nullptr) {
-// 			int sum = l1->val;
-
-// 			int base = sum + carry;
-// 			if (base >= 10)
-// 				carry = 1;
-// 			else
-// 				carry = 0;
-
-// 			base = (base >= 10) ? base % 10 : base;
-
-// 			ListNode * temp = new ListNode(base);
-
-// 			cur->next = temp;
-// 			cur = temp;
-// 			l1 = l1->next;
-// 		}
-// 		while (l2 != nullptr) {
-// 			int sum = l2->val;
-
-// 			int base = sum + carry;
-// 			if (base >= 10)
-// 				carry = 1;
-// 			else
-// 				carry = 0;
-
-// 			base = (base >= 10) ? base % 10 : base;
-
-// 			ListNode * temp = new ListNode(base);
-
-// 			cur->next = temp;
-// 			cur = temp;
-// 			l2 = l2->next;
-// 		}
-// 		if (carry) {
-// 			ListNode * temp = new ListNode(carry);
-
-// 			cur->next = temp;
-// 			cur = temp;
-// 		}
-
-// 		return dummy->next;
-// 	}
-// };
-
 class Solution {
 public:
 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 		ListNode *dummy = new ListNode();
 		ListNode *cur = dummy;
-
 		int carry = 0;
-		while (l1 != nullptr || l2 != nullptr || carry != 0) {
+		while (l1 || l2 || carry) {
 			int sum = 0;
-
 			if (l1) {
 				sum += l1->val;
 				l1 = l1->next;
@@ -164,12 +91,10 @@ public:
 				l2 = l2->next;
 			}
 			sum += carry;
-
 			int base = sum % 10;
 			carry = sum / 10;
 
-			ListNode * temp = new ListNode(base);
-
+			ListNode *temp = new ListNode(base);
 			cur->next = temp;
 			cur = temp;
 		}
@@ -179,15 +104,12 @@ public:
 
 void solve() {
 
-	ListNode *head1 = createll();
-	ListNode *head2 = createll();
+	ListNode *l1 = createll();
+	ListNode *l2 = createll();
 
-	// print(head1);
-	// print(head2);
+	auto ans = Solution().addTwoNumbers(l1, l2);
 
-	ListNode *sum = Solution().addTwoNumbers(head1, head2);
-
-	print(sum);
+	print(ans);
 
 	return ;
 }

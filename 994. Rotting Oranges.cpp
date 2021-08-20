@@ -37,37 +37,75 @@ const int N = 1e5 + 5;
 
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& nums, int target) {
-		int n = nums.size();
-		map<int, int> m;
+	int row[4] = {0, 0, -1, 1};
+	int col[4] = {1, -1, 0, 0};
+
+	int orangesRotting(vector<vector<int>>& grid) {
+		return bfs(grid);
+	}
+	int bfs(vector<vector<int>>& graph) {
+
+		int n = graph.size();
+		int m = graph[0].size();
+
+		queue<pair<int, int>> q;
+
+		int freshOrange = 0;
+		int minutes = -1;
+
 		for (int i = 0; i < n; i++) {
-			m[nums[i]] = i;
-		}
-		vector<int> ans;
-		for (int i = 0; i < n; i++) {
-			int rem = target - nums[i];
-			if (m[rem] && m[rem] != i) {
-				ans.pb(i);
-				ans.pb(m[rem]);
-				m[rem] = 0;
-				m[nums[i]] = 0;
+			for (int j = 0; j < m; j++) {
+				if (graph[i][j] == 2) {
+					q.push({i, j});
+				}
+				if (graph[i][j] == 1)
+					freshOrange++;
 			}
 		}
-		return ans;
+		if (freshOrange == 0)
+			return 0;
+
+		while (!q.empty()) {
+			int sz = q.size();
+			while (sz--) {
+				int curX = q.front().F;
+				int curY = q.front().S;
+				q.pop();
+
+				bool flag = false;
+				for (int i = 0; i < 4; i++) {
+
+					int r = curX + row[i];
+					int c = curY + col[i];
+
+					if (isValid(r, c, n, m) && graph[r][c] == 1) {
+						graph[r][c] = 2;
+						q.push({r, c});
+						freshOrange--;
+					}
+				}
+			}
+			minutes++;
+		}
+		if (freshOrange > 0)
+			return -1;
+		return minutes;
+	}
+	bool isValid(int x, int y, int n, int m) {
+		return (x >= 0 && x < n && y >= 0 && y < m);
 	}
 };
 
 void solve() {
 
 	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; i++)
-		cin >> a[i];
-
-	auto ans = Solution().twoSum(a, 8);
-
-	for (auto x : ans)
-		cout << x << " ";
+	vector<vector<int>> graph(n, vector<int>(n));
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> graph[i][j];
+		}
+	}
+	cout << Solution().orangesRotting(graph) << endl;
 
 	return ;
 }

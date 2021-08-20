@@ -37,37 +37,69 @@ const int N = 1e5 + 5;
 
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& nums, int target) {
-		int n = nums.size();
-		map<int, int> m;
-		for (int i = 0; i < n; i++) {
-			m[nums[i]] = i;
+	vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+		vector<vector<int>> graph(n);
+		for (auto x : connections) {
+			int u = x[0];
+			int v = x[1];
+			graph[u].pb(v);
+			graph[v].pb(u);
 		}
-		vector<int> ans;
+
+		vector<bool> visited(n, false);
+		vector<int> low(n, -1);
+		vector<int> entry(n, -1);
+		vector<vector<int>> ans;
+		int timer = 0;
+
 		for (int i = 0; i < n; i++) {
-			int rem = target - nums[i];
-			if (m[rem] && m[rem] != i) {
-				ans.pb(i);
-				ans.pb(m[rem]);
-				m[rem] = 0;
-				m[nums[i]] = 0;
+			if (!visited[i])
+				dfs(graph, i, -1, visited, entry, low, timer, ans);
+		}
+
+		return ans;
+	}
+	void dfs(vector<vector<int>>& graph, int src, int parent, vector<bool>& visited,
+	         vector<int>& entry, vector<int>& low, int timer, vector<vector<int>>& ans) {
+
+		visited[src] = true;
+		entry[src] = low[src] = timer++;
+
+		for (auto to : graph[src]) {
+			if (to == parent)
+				continue;
+
+			if (!visited[to]) {
+
+				dfs(graph, to, src, visited, entry, low, timer, ans);
+
+				low[src] = min(low[src], low[to]);
+				if (low[to] > entry[src]) {
+					ans.pb({src, to});
+				}
+			}
+			else {
+				low[src] = min(low[src], entry[to]);
 			}
 		}
-		return ans;
 	}
 };
 
 void solve() {
 
 	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; i++)
-		cin >> a[i];
+	vector<vector<int>> edges;
+	REP(i, 0, 3) {
+		int u, v; cin >> u >> v;
+		edges.pb({u, v});
+	}
+	auto ans = Solution().criticalConnections(n, edges);
 
-	auto ans = Solution().twoSum(a, 8);
-
-	for (auto x : ans)
-		cout << x << " ";
+	for (auto x : ans) {
+		for (auto y : x)
+			cout << y << " ";
+		cout << endl;
+	}
 
 	return ;
 }

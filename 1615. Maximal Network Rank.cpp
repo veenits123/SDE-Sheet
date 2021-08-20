@@ -35,7 +35,46 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+		vector<int> connections(n, 0);
+		map<int, vector<int>> graph;
+		for (auto x : roads) {
+			int u = x[0];
+			int v = x[1];
+			connections[u]++;
+			connections[v]++;
+
+			graph[u].pb(v);
+			graph[v].pb(u);
+		}
+		int maximalNetworkRank = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = i + 1; j < n; j++) {
+				int tempNetworkRank = connections[i] + connections[j];
+
+				if (find(all(graph[i]), j) != graph[i].end())
+					tempNetworkRank--;
+
+				maximalNetworkRank = max(maximalNetworkRank, tempNetworkRank);
+			}
+		}
+		return maximalNetworkRank;
+	}
+};
+
 void solve() {
+
+	int n; cin >> n;
+	vector<vector<int>> edges;
+
+	for (int i = 0; i < 4; i++) {
+		int u, v; cin >> u >> v;
+		edges.pb({u, v});
+	}
+
+	cout << Solution().maximalNetworkRank(n, edges);
 
 	return ;
 }

@@ -35,75 +35,29 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
-// class Solution {
-// public:
-// 	int lengthOfLongestSubstring(string s) {
-// 		int n = sz(s);
-// 		int ans = 0;
-// 		int l = 0, r = 0;
-// 		map <char, int> m;
-// 		while (r < n) {
-// 			if (m[s[r]]) {
-// 				while (m[s[r]]) {
-// 					m[s[l]] = 0;
-// 					l++;
-// 				}
-// 			}
-// 			ans = max(ans, (r - l + 1));
-// 			m[s[r]] = 1;
-// 			r++;
-// 		}
-// 		return ans;
-// 	}
-// };
-
-//vector :)
 class Solution {
 public:
 	int lengthOfLongestSubstring(string s) {
-		int n = sz(s);
+		map<char, int> hashMap;
+		int l = 0;
+		int r = 0;
 		int ans = 0;
-		int l = 0, r = 0;
-		vi lastIndex(256, -1);
-		while (r < n) {
-			if (lastIndex[s[r]] != -1)
-				l = max(l, lastIndex[s[r]] + 1);
+		for (int i = 0; i < s.size();) {
+			if (hashMap.find(s[i]) != hashMap.end()) {
+				l = max(l, hashMap[s[i]] + 1);
+			}
+			ans = max(ans, i - l + 1);
 
-			ans = max(ans, r - l + 1);
-
-			lastIndex[s[r]] = r;
-			r++;
+			hashMap[s[i]] = i;
+			i++;
 		}
 		return ans;
 	}
 };
 
-//map ;)
-// class Solution {
-// public:
-// 	int lengthOfLongestSubstring(string s) {
-// 		int n = sz(s);
-// 		int ans = 0;
-// 		int l = 0, r = 0;
-// 		map <char, int> m;
-// 		while (r < n) {
-// 			int lastIndex = (m.find(s[r]) != m.end()) ? m[s[r]] : -1;
-
-// 			l = max(l, lastIndex + 1);
-
-// 			ans = max(ans, r - l + 1);
-
-// 			m[s[r]] = r;
-// 			r++;
-// 		}
-// 		return ans;
-// 	}
-// };
-
 void solve() {
 
 	string s; cin >> s;
-
 	cout << Solution().lengthOfLongestSubstring(s) << endl;
 
 	return ;

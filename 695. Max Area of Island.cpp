@@ -37,37 +37,62 @@ const int N = 1e5 + 5;
 
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& nums, int target) {
-		int n = nums.size();
-		map<int, int> m;
+	int row[4] = {0, 0, -1, 1};
+	int col[4] = { -1, 1, 0, 0};
+
+	int maxAreaOfIsland(vector<vector<int>>& grid) {
+		int n = grid.size();
+		int m = grid[0].size();
+		vector<vector<bool>> vis(n, vector<bool>(m, false));
+		int ans = 0;
 		for (int i = 0; i < n; i++) {
-			m[nums[i]] = i;
-		}
-		vector<int> ans;
-		for (int i = 0; i < n; i++) {
-			int rem = target - nums[i];
-			if (m[rem] && m[rem] != i) {
-				ans.pb(i);
-				ans.pb(m[rem]);
-				m[rem] = 0;
-				m[nums[i]] = 0;
+			for (int j = 0; j < m; j++) {
+				if (!vis[i][j] && grid[i][j] == 1) {
+					int cnt = bfs(grid, vis, i, j);
+					ans = max(ans, cnt);
+				}
 			}
 		}
 		return ans;
+	}
+	int bfs(vector<vector<int>>& graph, vector<vector<bool>>& visited, int x, int y) {
+		int cnt = 0;
+		visited[x][y] = true;
+		queue<pair<int, int>> q;
+		q.push({x, y});
+		cnt++;
+		while (!q.empty()) {
+			auto cell = q.front();
+			int curX = cell.first;
+			int curY = cell.second;
+			q.pop();
+			for (int i = 0; i < 4; i++) {
+				int r = curX + row[i];
+				int c = curY + col[i];
+				if (isValid(r, c, graph.size(), graph[0].size()) && !visited[r][c] && graph[r][c] == 1) {
+					visited[r][c] = true;
+					q.push({r, c});
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
+	bool isValid(int i, int j, int n, int m) {
+		return (i >= 0 && j >= 0 && i < n && j < m);
 	}
 };
 
 void solve() {
 
-	int n; cin >> n;
-	vector<int> a(n);
-	for (int i = 0; i < n; i++)
-		cin >> a[i];
-
-	auto ans = Solution().twoSum(a, 8);
-
-	for (auto x : ans)
-		cout << x << " ";
+	int n, m; cin >> n >> m;
+	vector<vector<int>> graph(n, vector<int>(m));
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> graph[i][j];
+		}
+	}
+	cout << Solution().maxAreaOfIsland(graph) << endl;
 
 	return ;
 }

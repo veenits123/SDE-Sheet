@@ -35,7 +35,24 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	int countBT(int h) {
+		// code here
+		vector<int> dp(h + 1, 0);
+		dp[0] = dp[1] = 1;
+		for (int i = 2; i <= h; i++) {
+			dp[i] += (2 * (dp[i - 1] % mod) * (dp[i - 2] % mod)) % mod;
+			dp[i] += ((dp[i - 1]) % mod * (dp[i - 1]) % mod) % mod;
+		}
+		return dp[h] % mod;
+	}
+};
+
 void solve() {
+
+	int n; cin >> n;
+	cout << Solution().countBT(n) << endl;
 
 	return ;
 }

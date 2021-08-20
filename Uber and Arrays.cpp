@@ -37,6 +37,28 @@ const int N = 1e5 + 5;
 
 void solve() {
 
+	int n; cin >> n;
+	vector<int> arr(n + 1);
+	for (int i = 1; i <= n; i++)
+		cin >> arr[i];
+	vector<int> prefixProduct(n + 2, 1);
+	vector<int> suffixProduct(n + 2, 1);
+
+	for (int i = 1; i <= n; i++)
+		prefixProduct[i] = prefixProduct[i - 1] * arr[i];
+
+	for (int i = n; i >= 1; i--)
+		suffixProduct[i] = suffixProduct[i + 1] * arr[i];
+
+	vector<int> ans(n + 1);
+
+	for (int i = 1; i <= n; i++) {
+		ans[i] = prefixProduct[i - 1] * suffixProduct[i + 1];
+	}
+	for (int i = 1; i <= n; i++)
+		cout << ans[i] << " ";
+
+
 	return ;
 }
 

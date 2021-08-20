@@ -1,0 +1,52 @@
+ ## Name of the function:
+
+**pgr_edgeColoring()**: A bipartite graph is a graph with two sets of vertices which are connected to each other, but not within themselves. A bipartite graph is possible if the graph coloring is possible using two colors such that vertices in a set are colored with the same color.
+
+### Main Characteristics of the function:
+
+- Applicable only for undirected graphs.
+  (The "direction" of the edge has no significance to this algorithm).
+- The graph can be either weighted or unweighted.
+- Time complexity of the function is:  O(V + E).
+
+### Variants:
+
+- pgr_edgeColoring
+
+```sql
+pgr_edgeColoring(edges_sql)
+RETURNS SET OF (seq, node, color)
+OR EMPTY SET
+```
+
+### Parameters:
+
+Parameter | Type | Description
+-------------- | ------- | ---------------
+edges_sql | TEXT | Inner SQL query, as described below.
+
+### Inner Query
+
+**edges_sql**: ​ It should be an SQL query which should return a set of rows with the following columns:
+
+Column | Type | Default | Description
+---------- | ------- | --------- | ----------------
+id | ANY-INTEGER | | Identifier of the edge
+source | ANY-INTEGER | | Identifier of the first end point vertex of the edge
+target | ANY-INTEGER | | Identifier of the second end point vertex of the edge
+cost | ANY-NUMERICAL | | Weight of the edge (source, target). When negative: edge (source, target) does not exist, therefore it’s not part of the graph.
+reverse_cost | ANY-NUMERICAL | -1 | Weight of the edge (target, source). When negative: edge (target, source) does not exist, therefore it’s not part of the graph.
+
+Here,
+ANY-INTEGER ​ = ​ SMALLINT, INTEGER, BIGINT
+ANY-NUMERICAL ​ = ​ SMALLINT, INTEGER, BIGINT, REAL, FLOAT
+
+### Result Columns:
+
+Returns set of (seq, node, color)
+
+Column | Type | Description
+---------- | ------- | --------------
+seq | BIGINT | Sequential value starting from ​1
+node | BIGINT | Identifier of ​all the nodes in the graph
+color | BIGINT | Identifier of the color (0 or 1).

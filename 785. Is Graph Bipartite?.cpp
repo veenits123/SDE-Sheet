@@ -35,7 +35,48 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	bool isBipartite(vector<vector<int>>& graph) {
+		int n = graph.size();
+		vector<int> color(n, -1);
+		for (int i = 0; i < n; i++) {
+			if (color[i] == -1) {
+				if (!dfs(graph, i, 0, color))
+					return false;
+			}
+		}
+		return true;
+	}
+	bool dfs(vector<vector<int>>& graph, int src, int col, vector<int>& color) {
+		color[src] = col;
+		for (auto to : graph[src]) {
+			if (color[to] == -1) {
+				//cout << col << endl;
+				if (!dfs(graph, to, col ^ 1, color))
+					return false;
+			}
+			else {
+				if (color[to] == color[src])
+					return false;
+			}
+		}
+		return true;
+	}
+};
+
 void solve() {
+
+	int n; cin >> n;
+	vector<vector<int>> graph(n);
+
+	for (int i = 0; i < 3; i++) {
+		int u, v; cin >> u >> v;
+		graph[u].pb(v);
+		graph[v].pb(u);
+	}
+
+	cout << (Solution().isBipartite(graph) ? "YES" : "NO") << endl;
 
 	return ;
 }

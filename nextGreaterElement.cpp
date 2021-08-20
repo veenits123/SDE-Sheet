@@ -11,6 +11,7 @@
 #include <string>
 #include <cstring>
 #include <queue>
+#include <stack>
 using namespace std;
 
 /*ϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕ*/
@@ -35,7 +36,52 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+//tc: O(n^2);
+// vector<int> nextGreaterElement(vector<int>& arr) {
+// 	int n = arr.size();
+// 	vector<int> ans(n, 0);
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = i + 1; j < n; j++) {
+// 			if (arr[j] > arr[i]) {
+// 				ans[i] = j - i;
+// 				break;
+// 			}
+// 		}
+// 	}
+// 	return ans;
+// }
+
+//tc: O(n);
+vector<int> nextGreaterElement(vector<int>& arr) {
+	int n = arr.size();
+	vector<int> ans(n, 0);
+	stack<pair<int, int>> s;
+	for (int i = n; i >= 0; i--) {
+		while (!s.empty() && s.top().F <= arr[i]) {
+			s.pop();
+		}
+		if (!s.empty()) {
+			ans[i] = s.top().S - i;
+		}
+		s.push({arr[i], i});
+	}
+	return ans;
+}
+
 void solve() {
+
+	int n; cin >> n;
+	vector<int> a(n);
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+	}
+
+	auto ans = nextGreaterElement(a);
+
+	for (auto x : ans) {
+		cout << x << " ";
+	}
+	cout << endl;
 
 	return ;
 }

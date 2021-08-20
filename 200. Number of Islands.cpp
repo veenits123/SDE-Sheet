@@ -35,7 +35,51 @@ const int mod = 1e9 + 7;
 
 const int N = 1e5 + 5;
 
+class Solution {
+public:
+	int row[4] = {0, 0, -1, 1};
+	int col[4] = { -1, 1, 0, 0};
+
+	int numIslands(vector<vector<char>>& grid) {
+		int n = grid.size();
+		int m = grid[0].size();
+		vector<vector<bool>> vis(n, vector<bool>(m, false));
+
+		int cnt = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (grid[i][j] == '1' && !vis[i][j]) {
+					dfs(grid, vis, i, j);
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
+	void dfs(vector<vector<char>>& graph, vector<vector<bool>>& vis, int x, int y) {
+		vis[x][y] = true;
+		for (int i = 0; i < 4; i++) {
+			int r = x + row[i];
+			int c = y + col[i];
+			if (isValid(r, c, graph.size(), graph[0].size()) && !vis[r][c] && graph[r][c] == '1')
+				dfs(graph, vis, r, c);
+		}
+	}
+	bool isValid(int i, int j, int n, int m) {
+		return (i >= 0 && i < n && j >= 0 && j < m);
+	}
+};
+
 void solve() {
+
+	int n, m; cin >> n >> m;
+	vector<vector<char>> graph(n, vector<char>(m));
+
+	REP(i, 0, n - 1)
+	REP(j, 0, m - 1)
+	cin >> graph[i][j];
+
+	cout << Solution().numIslands(graph) << endl;
 
 	return ;
 }
