@@ -37,61 +37,28 @@ const int N = 1e5 + 5;
 
 class Solution {
 public:
-	int row[8] = {0, 0, -1, 1, 1, -1, -1, 1};
-	int col[8] = { -1, 1, 0, 0, 1, -1, 1, -1};
-
-	int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-		int n = grid.size();
-		vector<vector<bool>> visited(n, vector<bool>(n, false));
-		return bfs(grid, visited);
-	}
-	int bfs(vector<vector<int>>& graph, vector<vector<bool>>& visited) {
-		int n = graph.size();
-		if (graph[0][0] == 1 || graph[n - 1][n - 1] == 1)
-			return -1;
-
-		vector<vector<int>> dis(n, vector<int>(n, 0));
-
-		queue<pair<int, int>> q;
-		q.push({0, 0});
-		visited[0][0] = true;
-		dis[0][0] = 1;
-		while (!q.empty()) {
-			auto x = q.front();
-			q.pop();
-			int curRow = x.first;
-			int curCol = x.second;
-
-			if (curRow == n - 1 && curCol == n - 1)
-				return dis[n - 1][n - 1];
-
-			for (int i = 0; i < 8; i++) {
-				int r = curRow + row[i];
-				int c = curCol + col[i];
-
-				if (isValid(r, c, n) && !visited[r][c] && graph[r][c] == 0) {
-					q.push({r, c});
-					dis[r][c] = dis[curRow][curCol] + 1;
-					visited[r][c] = true;
-				}
+	int totalHammingDistance(vector<int>& nums) {
+		int ans = 0;
+		for (int i = 0; i < 32; i++) {
+			int cnt = 0;
+			for (int j = 0; j < nums.size(); j++) {
+				if (nums[j] & (1 << i))
+					cnt++;//no. of set bits at i'th bit of every elements;
+				//(nums.size() - cnt) = no. of 0 bits at i'th bit of every elements;
 			}
+			ans += cnt * (nums.size() - cnt);
 		}
-		return -1;
-	}
-	bool isValid(int i, int j, int n) {
-		return (i >= 0 && i < n && j >= 0 && j < n);
+		return ans;
 	}
 };
 
 void solve() {
 
 	int n; cin >> n;
-	vector<vector<int>> graph(n, vector<int>(n));
-	REP(i, 0, n - 1)
-	REP(j, 0, n - 1)
-	cin >> graph[i][j];
+	vector<int> a(n);
+	REP(i, 0, n - 1) cin >> a[i];
 
-	cout << Solution().shortestPathBinaryMatrix(graph) << endl;
+	cout << Solution().totalHammingDistance(a) << endl;
 
 	return ;
 }
