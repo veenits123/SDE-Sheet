@@ -9,10 +9,10 @@ using namespace std;
 
 int main(int, char*[]) {
 
-#ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-#endif
+// #ifndef ONLINE_JUDGE
+//     freopen("input.txt", "r", stdin);
+//     freopen("output.txt", "w", stdout);
+// #endif
 
     typedef adjacency_list<vecS, vecS, undirectedS, no_property, size_t,
             no_property>
