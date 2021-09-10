@@ -84,26 +84,88 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
+//sc: O(1), tc: O(n^2);
 class Solution {
 public:
 	bool isValidBST(TreeNode* root) {
-		if (!root)
+		if(root==NULL)
 			return true;
-		if (root->left)
-			if (root->val < root->left->val)
-				return false;
-		if (root->right)
-			if (root->val > root->right->val)
-				return false;
-		return (isValidBST(root->left) && isValidBST(root->right));
+		if(root->left!=NULL && maxValue(root->left)>=root->val)
+			return false;
+		if(root->right!=NULL && minValue(root->right)<=root->val)
+			return false;
+		if(isValidBST(root->left)==false || isValidBST(root->right)==false)
+			return false;
+		return true;
+	}
+	int minValue(TreeNode* root){
+		if(root==nullptr)
+			return INT_MAX;
+		int ans=min(root->val,min(minValue(root->left),minValue(root->right)));
+		return ans;
+	}
+	int maxValue(TreeNode* root){
+		if(root==nullptr)
+			return INT_MIN;
+		int ans=max(root->val,max(maxValue(root->left),maxValue(root->right)));
+		return ans;
 	}
 };
+
+//sc: O(n), tc: O(n);
+// class Solution {
+// public:
+// 	bool isValidBST(TreeNode* root) {
+// 		if (!root)
+// 			return true;
+// 		vector<int> in;
+// 		inorder(root,in);
+// 		for(int i=0;i<in.size()-1;i++){
+// 			if(in[i]>=in[i+1])
+// 				return false;
+// 		}
+// 		return true;
+// 	}
+// 	void inorder(TreeNode* root,vector<int>& in){
+// 		if(root==NULL)
+// 			return ;
+// 		inorder(root->left,in);
+// 		in.push_back(root->val);
+// 		inorder(root->right,in);
+// 	}
+// };
+
+#if 0
+//sc: O(1), tc: O(n);
+class Solution {
+public:
+	bool isValidBST(TreeNode* root) {
+		TreeNode* prev=nullptr;
+		return isBST(root,prev);
+	}
+	bool isBST(TreeNode* root,TreeNode* &prev){
+		if(!root)
+			return true;
+
+		if(!isBST(root->left,prev))
+			return false;
+
+		if(prev && prev->val>=root->val)
+			return false;
+
+		prev=root;
+
+		return isBST(root->right,prev);	
+	}
+};
+#endif
 
 void solve() {
 
 	TreeNode* root = build_btree();
 
-	cout << Solution().isValidBST(root) << endl;
+	cout << Solution().maxValue(root) << endl;
+	//preOrder(root);
 
 	return ;
 }
