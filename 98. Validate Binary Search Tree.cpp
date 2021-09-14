@@ -164,7 +164,7 @@ void solve() {
 
 	TreeNode* root = build_btree();
 
-	cout << Solution().maxValue(root) << endl;
+	cout << Solution().isValidBST(root) << endl;
 	//preOrder(root);
 
 	return ;

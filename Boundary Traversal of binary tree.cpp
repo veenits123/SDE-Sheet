@@ -142,7 +142,7 @@ public:
     	else if(root->left)
     		rightTraversal(root->left,rightBoundary);
     	if(root->left || root->right)
-    	rightBoundary.push_back(root->data);
+    		rightBoundary.push_back(root->data);
     }
 };
 

@@ -11,9 +11,9 @@
 #include <string>
 #include <cstring>
 #include <queue>
+#include <stack>
+#include <climits>
 using namespace std;
-
-/*ϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕ*/
 
 #define int long long
 #define ld long double
@@ -30,9 +30,6 @@ using namespace std;
 #define pb push_back
 #define endl '\n'
 const int mod = 1e9 + 7;
-
-/* → → → → → → → → → → → → → → → → → → → → → → → → → → → → */
-
 const int N = 1e5 + 5;
 
 //Definition for a binary tree node.
@@ -84,68 +81,52 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
-// class Solution {
-// public:
-// 	vector<vector<int>> verticalTraversal(TreeNode* root) {
-// 		vector <vector<int>> ans;
-// 		if (!root)
-// 			return ans;
-// 		queue <pair<TreeNode*, int>> q;
-// 		q.push({root, 0});
-// 		map <int, vector<int>> level;
-// 		while (!q.empty()) {
-// 			int n = q.size();
-
-// 			for (int i = 1; i <= n; i++) {
-// 				TreeNode* cur = q.front().first;
-// 				int hdis = q.front().second;
-// 				q.pop();
-
-// 				level[hdis].push_back(cur->val);
-
-// 				if (cur->left)
-// 					q.push({cur->left, hdis - 1});
-
-// 				if (cur->right)
-// 					q.push({cur->right, hdis + 1});
-// 			}
-// 		}
-// 		for (auto x : level)
-// 			ans.push_back(x.second);
-// 		return ans;
-// 	}
-// };
-
-
-//recursive;
 class Solution {
-public:
-	vector<vector<int>> verticalTraversal(TreeNode* root) {
-		vector<vector<int>> ans;
-		map <int, vector<int>> m;
-		helper(root, 0, m);
-		for (auto x : m)
-			ans.push_back(x.second);
-		return ans;
-	}
-	void helper(TreeNode* root, int hdis, map <int, vector<int>>& m) {
-		if (!root)
-			return ;
-		m[hdis].push_back(root->val);
-		helper(root->left, hdis - 1, m);
-		helper(root->right, hdis + 1, m);
-	}
+ public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+    	vector<vector<int>> ans;
+    	if(!root)
+    		return ans;
+
+    	queue<pair<TreeNode*,pair<int,int>>> q;
+    	q.push({root,{0,0}});
+
+    	map<int,map<int,multiset<int>>> nodesVertical;
+
+    	while(!q.empty()){
+    	    auto x=q.front();
+    		q.pop();
+    		TreeNode* curNode=x.first;
+    		int curRow=x.second.first;
+    		int curCol=x.second.second;
+    		nodesVertical[curRow][curCol].insert(curNode->val);
+    		if(curNode->left)
+    			q.push({curNode->left,{curRow-1,curCol+1}});
+    		if(curNode->right)
+    			q.push({curNode->right,{curRow+1,curCol+1}});	
+    	}
+    	for(auto x:nodesVertical){
+    		vector<int> temp;
+    		auto y=x.second;
+    		for(auto z:y)
+    			for(auto ele:z.second)
+    				temp.push_back(ele);
+    		ans.push_back(temp);
+    	}
+    	return ans;  
+    }
 };
+
 void solve() {
 
-	TreeNode *root = build_btree();
+	TreeNode* root=build_btree();
 
-	auto ans = Solution().verticalTraversal(root);
+	auto ans=Solution().verticalTraversal(root);
 
-	for (auto y : ans) {
-		for (auto x : y)
-			cout << x << " ";
-		cout << endl;
+	for(auto x:ans){
+		for(auto y:x)
+			cout<<y<<" ";
+		cout<<endl;
 	}
 
 	return ;

@@ -83,25 +83,20 @@ void postOrder(TreeNode *root) {
 
 class Solution {
 public:
-    int maxPathSum(TreeNode* root) {
-        int ans=INT_MIN;
-        helper(root,ans);
-        return ans;
+    int kthSmallest(TreeNode* root, int k) {
+    	int cnt=0;
+    	int ans=-1;
+    	helper(root,k,cnt,ans);
+    	return ans;
     }
-    int helper(TreeNode* root,int &ans){
+    void helper(TreeNode* root,int &k,int &cnt,int &ans){
     	if(root==nullptr)
-    		return 0;
-
-    	int leftMaxPathSum=helper(root->left,ans);
-    	int rightMaxPathSum=helper(root->right,ans);
-
-    	int temp=max(max(leftMaxPathSum,rightMaxPathSum)+root->val,root->val);
-
-    	int noAncestorInvolved=max(temp,leftMaxPathSum+rightMaxPathSum+root->val);
-
-    	ans=max(ans,noAncestorInvolved);
-
-    	return temp;
+    		return ;
+    	helper(root->left,k,cnt,ans);
+    	cnt++;
+    	if(cnt==k)
+    		ans=root->val;
+    	helper(root->right,k,cnt,ans);
     }
 };
 
@@ -109,7 +104,9 @@ void solve() {
 
 	TreeNode* root=build_btree();
 
-	cout<<Solution().maxPathSum(root)<<endl;
+	auto ans=Solution().kthSmallest(root,3);
+
+	cout<<ans<<endl;
 
 	return ;
 }

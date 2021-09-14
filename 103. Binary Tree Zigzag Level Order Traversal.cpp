@@ -10,11 +10,10 @@
 #include <cassert>
 #include <string>
 #include <cstring>
-#include <stack>
 #include <queue>
+#include <stack>
+#include <climits>
 using namespace std;
-
-/*ϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕ*/
 
 #define int long long
 #define ld long double
@@ -31,9 +30,6 @@ using namespace std;
 #define pb push_back
 #define endl '\n'
 const int mod = 1e9 + 7;
-
-/* → → → → → → → → → → → → → → → → → → → → → → → → → → → → */
-
 const int N = 1e5 + 5;
 
 //Definition for a binary tree node.
@@ -85,90 +81,52 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
-//sc: O(2n)
-// class Solution {
-// public:
-// 	vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-// 		vector<vector<int>> ans;
-// 		if (!root)
-// 			return ans;
-// 		stack <TreeNode*> curLevel;
-// 		stack <TreeNode*> nextLevel;
-// 		curLevel.push(root);
-// 		bool leftToRight = true;
-// 		while (!curLevel.empty()) {
-// 			vector <int> level;
-// 			while (!curLevel.empty()) {
-// 				TreeNode* temp = curLevel.top();
-// 				curLevel.pop();
-// 				if (temp) {
-// 					level.push_back(temp->val);
-// 					if (leftToRight) {
-// 						if (temp->left)
-// 							nextLevel.push(temp->left);
-// 						if (temp->right)
-// 							nextLevel.push(temp->right);
-// 					}
-// 					else {
-// 						if (temp->right)
-// 							nextLevel.push(temp->right);
-// 						if (temp->left)
-// 							nextLevel.push(temp->left);
-// 					}
-// 				}
-// 			}
-// 			ans.push_back(level);
-// 			leftToRight = !leftToRight;
-// 			swap(curLevel, nextLevel);
-// 		}
-// 		return ans;
-// 	}
-// };
-
-//sc: O(n)
 class Solution {
 public:
-	vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-		vector<vector<int>> ans;
-		if (!root)
-			return ans;
-		queue <TreeNode*> q;
-		q.push(root);
-		bool leftToRight = true;
-		while (!q.empty()) {
-			int n = q.size();
-			vector <int> level(n);
-			for (int i = 0; i < n; i++) {
-				TreeNode* cur = q.front();
-				q.pop();
-				if (cur) {
-					if (leftToRight)
-						level[i] = cur->val;
-					else
-						level[n - i - 1] = cur->val;
-					if (cur->left)
-						q.push(cur->left);
-					if (cur->right)
-						q.push(cur->right);
-				}
-			}
-			ans.push_back(level);
-			leftToRight = !leftToRight;
-		}
-		return ans;
-	}
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    	vector<vector<int>> ans;
+
+    	if(!root)
+           return ans;
+
+    	queue<TreeNode*> q;
+    	q.push(root);
+
+    	bool leftToRight=true;
+
+    	while(!q.empty()){
+    		int n=q.size();
+    		vector<int> curLevel(n);
+    		for(int i=0;i<n;i++){
+    			auto curRoot=q.front();
+    			q.pop();
+ 				
+ 				int index=(leftToRight==true)? i: n-1-i;
+    			
+    			curLevel[index]=curRoot->val;
+
+    			if(curRoot->left)
+    				q.push(curRoot->left);
+    			if(curRoot->right)
+    				q.push(curRoot->right);
+    		}
+    		leftToRight= !leftToRight;
+    		ans.push_back(curLevel);
+    	}
+    	return ans;
+    }
 };
 
 void solve() {
 
-	TreeNode *root = build_btree();
+	TreeNode* root=build_btree();
 
-	auto ans = Solution().zigzagLevelOrder(root);
+	auto ans=Solution().zigzagLevelOrder(root);
 
-	for (auto y : ans) {
-		for (auto x : y)
-			cout << x << " ";
-		cout << endl;
+	for(auto x:ans){
+		for(auto y:x)
+			cout<<y<<" ";
+		cout<<endl;
 	}
 
 	return ;

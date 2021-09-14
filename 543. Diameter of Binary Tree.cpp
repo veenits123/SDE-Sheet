@@ -11,9 +11,9 @@
 #include <string>
 #include <cstring>
 #include <queue>
+#include <stack>
+#include <climits>
 using namespace std;
-
-/*ϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕϕ*/
 
 #define int long long
 #define ld long double
@@ -30,9 +30,6 @@ using namespace std;
 #define pb push_back
 #define endl '\n'
 const int mod = 1e9 + 7;
-
-/* → → → → → → → → → → → → → → → → → → → → → → → → → → → → */
-
 const int N = 1e5 + 5;
 
 //Definition for a binary tree node.
@@ -86,32 +83,28 @@ void postOrder(TreeNode *root) {
 
 class Solution {
 public:
-	int diameterOfBinaryTree(TreeNode* root) {
-		int res = 0;
-		diameter(root, res);
-		return res;
-	}
+    int diameterOfBinaryTree(TreeNode* root) {
+    	int diameter=0;
+    	height(root,diameter);
+    	return diameter;
+    }
+    int height(TreeNode* root,int &diameter){
+    	if(root==nullptr)
+    		return 0;
+    	int leftHeight=height(root->left,diameter);
+    	int rightHeight=height(root->right,diameter);
 
-	int diameter(TreeNode * root, int & res) {
-		if (root == NULL)
-			return 0;
-		int l = diameter(root->left, res);
-		int r = diameter(root->right, res);
+    	diameter=max(diameter,leftHeight+rightHeight);
 
-		int temp = max(l, r) + 1;
-
-		res = max(res, l+r);
-
-		return temp;
-	}
+    	return max(leftHeight,rightHeight)+1;
+    }
 };
 
 void solve() {
 
+	TreeNode* root=build_btree();
 
-	TreeNode* root = build_btree();
-
-	cout << Solution().diameterOfBinaryTree(root);
+	cout<<Solution().diameterOfBinaryTree(root)<<endl;
 
 	return ;
 }
