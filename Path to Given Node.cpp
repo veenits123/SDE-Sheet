@@ -81,30 +81,34 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
-class Solution {
-public:
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-       if(root==nullptr || p==root || q==root)
-       		return root;
-       	TreeNode* left=lowestCommonAncestor(root->left,p,q);
-       	TreeNode* right=lowestCommonAncestor(root->right,p,q);
+void helper(TreeNode* root,int x,vector<int>& ans){
+	if(root==nullptr)
+		return ;
+	if(root->val==x){
+		ans.push_back(x);
+		return ;
+	}
+	helper(root->left,x,ans);
+	helper(root->right,x,ans);
 
-       	if(left==nullptr)
-       		return right;
-       	else if(right==nullptr)
-       		return left; 
-       	return root;
-    }
-};
+	//ans.push_back(root->val);
+}
 
-void solve() {
+vector<int> solve(TreeNode* A, int B) {
+	vector<int> ans;
+	helper(A,B,ans);
+	return ans;
+}
+
+
+void fun() {
 
 	TreeNode* root=build_btree();
+	auto ans= solve(root,3);
 
-	TreeNode* p=new TreeNode(3);
-	TreeNode* q=new TreeNode(6);
-
-	cout<<Solution().lowestCommonAncestor(root,p,q)<<endl;
+	for(auto x:ans)
+		cout<<x<<" ";
+	cout<<endl;
 
 	return ;
 }
@@ -120,7 +124,7 @@ int32_t main() {
 #endif
 
 	//int t;cin>>t;while(t--)
-	solve();
+	fun();
 
 	return 0;
 }
