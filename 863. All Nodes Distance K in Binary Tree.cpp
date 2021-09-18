@@ -83,52 +83,80 @@ void postOrder(TreeNode *root) {
 
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        int index=0;
-       auto ans=constructBT(preorder,inorder,0,preorder.size()-1,index);
-       return ans;
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+    	map<TreeNode*,TreeNode*> parent;
+    	findParent(root,parent);
+
+    	map<TreeNode*,bool> visited;
+
+    	queue<TreeNode*> q;
+    	q.push(target);
+    	int curLevel=0;
+
+    	visited[target]=true;
+
+    	while(!q.empty()){	
+    		if(curLevel==k)
+    			break;
+    		curLevel++;
+
+    		int n=q.size();
+    		while(n--){
+    			TreeNode* cur=q.front();
+    			q.pop();
+    			if(cur->left && !visited[cur->left]){
+    				q.push(cur->left);
+    				visited[cur->left]=true;
+    			}
+    			if(cur->right && !visited[cur->right]){
+    				q.push(cur->right);
+    				visited[cur->right]=true;
+    			}
+
+    			if(parent[cur] && !visited[parent[cur]]){
+    				q.push(parent[cur]);
+    				visited[parent[cur]]=true;
+    			}
+    		}
+    	}
+    	vector<int> ans;
+    	while(!q.empty()){
+    		ans.push_back(q.front()->val);
+    		q.pop();
+    	}
+    	return ans; 
     }
-    TreeNode* constructBT(vector<int>& pre,vector<int>& in,int start,int end,int &index){
-    	if(start>end)
-    		return nullptr;
+    void findParent(TreeNode* root,map<TreeNode*,TreeNode*>& parent){
+    	if(root==nullptr)
+    		return ;
 
-    	int cur=pre[index];
-    	index++;
+    	//dfs;
+    	if(root->left)
+    		parent[root->left]=root;
+    	if(root->right)
+    		parent[root->right]=root;
+    	findParent(root->left,parent);
+    	findParent(root->right,parent);
 
-    	TreeNode* root=new TreeNode(cur);
-
-    	if(start==end)
-    		return root;
-
-    	int posCurNode=findIndex(in,cur,start,end);
-
-    	if(posCurNode!=-1){
-    		root->left=constructBT(pre,in,start,posCurNode-1,index);
-    		root->right=constructBT(pre,in,posCurNode+1,end,index);
-   		}
-    	return root;
-    }
-    int findIndex(vector<int>& in,int val,int start,int end){
-    	for(int i=start;i<=end;i++)
-    		if(in[i]==val)
-    			return i;
-    	return -1;
+    	//dfs;
+    	// queue<TreeNode*> q;
+    	// q.push(root);
+    	// while(!q.empty()){
+    	// 	TreeNode* cur=q.front();
+    	// 	q.pop();
+    	// 	if(cur->left){
+    	// 		q.push(cur->left);
+    	// 		parent[cur->left]=cur;
+    	// 	}
+    	// 	if(cur->right){
+    	// 		q.push(cur->right);
+    	// 		parent[cur->right]=cur;
+    	// 	}
+    	// }
     }
 };
 
 void solve() {
-
-	vector<int> pre,in;
-	int n;cin>>n;
-	int x;
-	for(int i=0;i<n;i++)
-		cin>>x,pre.pb(x);
-	for(int i=0;i<n;i++)
-		cin>>x,in.pb(x);
-
-	auto ans=Solution().buildTree(pre,in);
-
-	preOrder(ans);
 
 	return ;
 }
