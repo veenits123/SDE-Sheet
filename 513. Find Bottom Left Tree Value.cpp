@@ -81,56 +81,59 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
+#if 0
+//bfs;
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-    	int n=inorder.size();
-    	map<int,int> findIndex;
-    	for(int i=0;i<inorder.size();i++){
-    		findIndex[inorder[i]]=i;
+    int findBottomLeftValue(TreeNode* root) {
+    	if(!root)
+    		return -1;
+    	queue<TreeNode*> q;
+    	q.push(root);
+    	int ans=-1;
+    	while(!q.empty()){
+    		int n=q.size();
+    		ans=q.front()->val;
+    		while(n--){
+    			TreeNode* cur=q.front();
+    			q.pop();
+    			if(cur->left)
+    				q.push(cur->left);
+    			if(cur->right)
+    				q.push(cur->right);
+    		}
     	}
-    	int i=n-1;
-        return constructBT(inorder,postorder,0,n-1,i,findIndex);
+    	return ans; 
     }
-    TreeNode* constructBT(vector<int>& in,vector<int>& post,int start,int end,int &index,map<int,int>& findIndex){
-    	if(start>end)
-    		return nullptr;
-    	int cur=post[index];
-    	index--;
+};
+#endif
 
-    	TreeNode* root=new TreeNode(cur);
-
-    	if(start==end)
-    		return root;
-
-    	int posInOrder=-1;
-    	if(findIndex.find(cur)!=findIndex.end())
-    		posInOrder=findIndex[cur];
-
-    	if(posInOrder!=-1){
-    		//root->right is made first bcz we traverse in reverse order in posorder(left right root) 
-    		//so in reverse it should be root>right>left;
-    		root->right=constructBT(in,post,posInOrder+1,end,index,findIndex);
-    		root->left=constructBT(in,post,start,posInOrder-1,index,findIndex);   		
+//dfs;
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+    	int maxmDepth=0;
+    	int ans;
+    	dfs(root,1,ans,maxmDepth);
+    	return ans;
+    }
+    void dfs(TreeNode* root,int level,int &ans,int &maxmDepth){
+    	if(!root)
+    		return ;
+    	if(level>maxmDepth){
+    		maxmDepth=level;
+    		ans=root->val;
     	}
-    	return root;
+    	dfs(root->left,level+1,ans,maxmDepth);
+    	dfs(root->right,level+1,ans,maxmDepth);
     }
 };
 
 void solve() {
 
-	vector<int> in,post;
-	int n;cin>>n;
-	int x;
-	REP(i,0,n-1)
-	cin>>x,in.pb(x);
+	auto root=build_btree();
 
-	REP(i,0,n-1)
-	cin>>x,post.pb(x);
-
-	auto ans=Solution().buildTree(in,post);
-
-	preOrder(ans);
+	cout<<Solution().findBottomLeftValue(root);
 
 	return ;
 }

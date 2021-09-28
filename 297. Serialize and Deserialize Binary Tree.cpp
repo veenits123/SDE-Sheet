@@ -1,18 +1,5 @@
 // never the same!!
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <set>
-#include <algorithm>
-#include <vector>
-#include <map>
-#include <iomanip>
-#include <cassert>
-#include <string>
-#include <cstring>
-#include <queue>
-#include <stack>
-#include <climits>
+#include "bits/stdc++.h"
 using namespace std;
 
 #define int long long
@@ -81,54 +68,89 @@ void postOrder(TreeNode *root) {
 	cout << root->val << " ";
 }
 
-class Solution {
+class Codec {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-    	int n=inorder.size();
-    	map<int,int> findIndex;
-    	for(int i=0;i<inorder.size();i++){
-    		findIndex[inorder[i]]=i;
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+    	string ans="";
+    	if(!root)
+    		return ans;
+    	queue<TreeNode*> q;
+    	q.push(root);
+    	while(!q.empty()){
+    		TreeNode* cur=q.front();
+    		q.pop();
+    		if(cur==nullptr)
+    			ans+="#,";
+    		else
+    			ans+=to_string(cur->val)+",";
+    		if(cur){
+    			q.push(cur->left);
+    			q.push(cur->right);
+    		}
     	}
-    	int i=n-1;
-        return constructBT(inorder,postorder,0,n-1,i,findIndex);
+    	//cout<<ans;
+    	return ans;
     }
-    TreeNode* constructBT(vector<int>& in,vector<int>& post,int start,int end,int &index,map<int,int>& findIndex){
-    	if(start>end)
-    		return nullptr;
-    	int cur=post[index];
-    	index--;
 
-    	TreeNode* root=new TreeNode(cur);
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+    	int n=data.size();
+        if(n==0)
+        	return nullptr;
 
-    	if(start==end)
-    		return root;
+        stringstream s(data);
 
-    	int posInOrder=-1;
-    	if(findIndex.find(cur)!=findIndex.end())
-    		posInOrder=findIndex[cur];
+        string str;
+        getline(s, str, ',');
 
-    	if(posInOrder!=-1){
-    		//root->right is made first bcz we traverse in reverse order in posorder(left right root) 
-    		//so in reverse it should be root>right>left;
-    		root->right=constructBT(in,post,posInOrder+1,end,index,findIndex);
-    		root->left=constructBT(in,post,start,posInOrder-1,index,findIndex);   		
-    	}
-    	return root;
+        int val=stoi(str);
+
+        TreeNode* root=new TreeNode(val);
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while(!q.empty()){
+        	TreeNode* cur=q.front();
+        	q.pop();
+
+        	string str;
+        	getline(s, str, ',');
+
+        	if(str=="#")
+        		cur->left=nullptr;	
+        	else{
+        		TreeNode* leftNode=new TreeNode(stoi(str));
+        		cur->left=leftNode;
+        		q.push(leftNode);
+        	}
+        	//string str;
+        	getline(s, str, ',');
+
+        	if(str=="#")
+        		cur->right=nullptr;
+        	else{
+        		TreeNode* rightNode=new TreeNode(stoi(str));
+        		cur->right=rightNode;
+        		q.push(rightNode);
+        	}
+        }
+        return root;
     }
 };
 
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
+
 void solve() {
 
-	vector<int> in,post;
-	int n;cin>>n;
-	int x;
-	REP(i,0,n-1)
-	cin>>x,in.pb(x);
+	auto root=build_btree();
 
-	REP(i,0,n-1)
-	cin>>x,post.pb(x);
-
-	auto ans=Solution().buildTree(in,post);
+	Codec ser, deser;
+	TreeNode* ans = deser.deserialize(ser.serialize(root));
 
 	preOrder(ans);
 

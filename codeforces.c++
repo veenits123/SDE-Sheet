@@ -34,6 +34,27 @@ const int N = 1e5 + 5;
 
 void solve() {
 
+	int n;cin>>n;
+	vector<string> vs(n);
+	//vector<pair<int,int>> ind;
+	for(int i=0;i<n;i++)
+		cin>>vs[i];
+	int q;cin>>q;
+	for(int i=0;i<q;i++){
+		int l,r,k;cin>>l>>r>>k;
+		l--;
+		r--;
+		k--;
+	
+		string temp="";
+		for(int j=l;j<=r;j++){
+			temp+=vs[j];
+		}
+		sort(temp.begin(),temp.end());
+		cout<<temp[k]<<endl;
+	}
+	
+
 	return ;
 }
 
@@ -47,8 +68,9 @@ int32_t main() {
 	freopen("output.txt", "w", stdout);
 #endif
 
-	//int t;cin>>t;while(t--)
-	solve();
+	
+		solve();
+	
 
 	return 0;
 }

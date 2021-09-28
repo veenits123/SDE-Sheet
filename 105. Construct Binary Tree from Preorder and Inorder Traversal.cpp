@@ -84,11 +84,14 @@ void postOrder(TreeNode *root) {
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        int index=0;
-       auto ans=constructBT(preorder,inorder,0,preorder.size()-1,index);
+       int index=0;
+       map<int,int> findIndex;
+       for(int i=0;i<inorder.size();i++)
+       		findIndex[inorder[i]]=i;
+       auto ans=constructBT(preorder,inorder,0,preorder.size()-1,index,findIndex);
        return ans;
     }
-    TreeNode* constructBT(vector<int>& pre,vector<int>& in,int start,int end,int &index){
+    TreeNode* constructBT(vector<int>& pre,vector<int>& in,int start,int end,int &index,map<int,int>& findIndex){
     	if(start>end)
     		return nullptr;
 
@@ -100,19 +103,15 @@ public:
     	if(start==end)
     		return root;
 
-    	int posCurNode=findIndex(in,cur,start,end);
+    	int posCurNode=-1;
+    	if(findIndex.find(cur)!=findIndex.end())
+    		posCurNode=findIndex[cur];
 
     	if(posCurNode!=-1){
-    		root->left=constructBT(pre,in,start,posCurNode-1,index);
-    		root->right=constructBT(pre,in,posCurNode+1,end,index);
+    		root->left=constructBT(pre,in,start,posCurNode-1,index,findIndex);
+    		root->right=constructBT(pre,in,posCurNode+1,end,index,findIndex);
    		}
     	return root;
-    }
-    int findIndex(vector<int>& in,int val,int start,int end){
-    	for(int i=start;i<=end;i++)
-    		if(in[i]==val)
-    			return i;
-    	return -1;
     }
 };
 
@@ -128,7 +127,7 @@ void solve() {
 
 	auto ans=Solution().buildTree(pre,in);
 
-	preOrder(ans);
+	postOrder(ans);
 
 	return ;
 }
