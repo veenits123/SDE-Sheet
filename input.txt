@@ -1,13 +1,5 @@
-5
-aaaaa
-bbbbb
-ccccc
-ddddd
-eeeee
-3
-3 3 3
-1 5 16
-3 5 15
+5 4 3
+17 8 9 1 4
 
 
 
