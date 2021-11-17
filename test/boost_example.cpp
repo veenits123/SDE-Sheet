@@ -1,18 +1,23 @@
-#include <boost/config.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/edge_coloring.hpp>
-#include <boost/graph/properties.hpp>
+// #include <boost/config.hpp>
+// #include <boost/graph/adjacency_list.hpp>
+// #include <boost/graph/edge_coloring.hpp>
+// #include <boost/graph/properties.hpp>
 #include <iostream>
+#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/config.hpp>
+#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/adjacency_list.hpp>
+#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/edge_coloring.hpp>
+#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/properties.hpp>
+
 
 using namespace boost;
 using namespace std;
 
 int main(int, char*[]) {
 
-// #ifndef ONLINE_JUDGE
-//     freopen("input.txt", "r", stdin);
-//     freopen("output.txt", "w", stdout);
-// #endif
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
 
     typedef adjacency_list<vecS, vecS, undirectedS, no_property, size_t,
             no_property>

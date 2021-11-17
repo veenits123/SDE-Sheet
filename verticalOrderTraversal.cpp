@@ -86,75 +86,63 @@ void postOrder(TreeNode *root) {
 
 class Solution {
 public:
-	vector<vector<int>> levelOrderBottom(TreeNode* root) {
-		vector <vector<int>> ans;
-		if (!root)
-			return ans;
-		vector <int> level;
-		queue <TreeNode*> q;
-		q.push(root);
-		while (!q.empty()) {
-			int n = q.size();
-			while (n--) {
-				TreeNode *cur = q.front();
-				q.pop();
-				level.push_back(cur->val);
+	// vector<vector<int>> verticalOrderTraversal(TreeNode* root) {
+	// 	vector<vector<int>> ans;
+	// 	if(!root)
+	// 		return ans;
+	// 	queue<pair<TreeNode*,int>> q;
+	// 	q.push({root,0});
+	// 	map<int,vector<int>> rows;
+	// 	while(!q.empty()){
+	// 		auto temp=q.front();
+	// 		q.pop();
+	// 		int curRow=temp.second;
+	// 		TreeNode* curNode=temp.first;
 
-				if (cur->left)
-					q.push(cur->left);
-				if (cur->right)
-					q.push(cur->right);
-			}
-			ans.push_back(level);
-			level.clear();
-		}
-		reverse(all(ans));
+	// 		rows[curRow].push_back(curNode->val);
+
+	// 		if(curNode->left)
+	// 			q.push({curNode->left,curRow-1});
+	// 		if(curNode->right)
+	// 			q.push({curNode->right,curRow+1});
+	// 	}
+	// 	for(auto x:rows)
+	// 		ans.push_back(x.second);
+	// 	return ans;
+	// }
+
+	vector<vector<int>> verticalOrderTraversal(TreeNode* root) {
+		vector<vector<int>> ans;
+		map<int,vector<int>> m;
+		
+		int row=0;
+		helper(root, row, m);
+
+		for(auto x:m)
+			ans.push_back(x.second);
 		return ans;
+	}
+	void helper(TreeNode* root, int row, map<int,vector<int>> &m){
+		if(!root)
+			return ;
+
+		m[row].push_back(root->val);
+
+		helper(root->left,row-1,m);
+		helper(root->right,row+1,m);
 	}
 };
-
-vector<vector<int>> verticalOrder(TreeNode* root){
-	vector<vector<int>> ans;
-	if(!root)
-		return ans;
-
-	map<int,vector<int>> nodeAtaxis;
-
-	queue<pair<TreeNode*,int>> q;
-	q.push({root,0});
-	while(!q.empty()){
-		auto temp=q.pop();
-		TreeNode* cur=temp.F;
-		int axis=temp.S;
-
-		nodeAtaxis[axis].pb(cur->val);
-
-		if(cur->left){
-			q.push({cur->left,axis-1});
-		}
-		if(cur->right){
-			q.push({cur->right,axis+1});
-		}
-	}
-	for(auto x:nodeAtaxis){
-		ans.pb(x);
-	}
-
-	return ans;
-}
 
 void solve() {
 
 	TreeNode *root = build_btree();
 
-	//auto ans = Solution().levelOrderBottom(root);
+	auto ans = Solution().verticalOrderTraversal(root);
 
-	auto ans=Solution().verticalOrder(root);
-
-	for (auto y : ans) {
-		for (auto x : y)
-			cout << x << " ";
-		cout << endl;
+	for (auto x : ans){
+		for(auto y:x)
+			cout << y << " ";
+		cout<<endl;
 	}
 
 	return ;
