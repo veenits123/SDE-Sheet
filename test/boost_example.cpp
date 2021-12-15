@@ -1,12 +1,9 @@
-// #include <boost/config.hpp>
-// #include <boost/graph/adjacency_list.hpp>
-// #include <boost/graph/edge_coloring.hpp>
-// #include <boost/graph/properties.hpp>
+#include <boost/config.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/edge_coloring.hpp>
+#include <boost/graph/properties.hpp>
 #include <iostream>
-#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/config.hpp>
-#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/adjacency_list.hpp>
-#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/edge_coloring.hpp>
-#include </opt/homebrew/Cellar/boost/1.76.0/include/boost/graph/properties.hpp>
+
 
 
 using namespace boost;

@@ -57,6 +57,11 @@ public:
 int main()
 {
 
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+
     myDataStructure ds;
     ds.insert(1);
     ds.insert(2);
