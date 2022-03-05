@@ -32,50 +32,46 @@ using namespace std;
 const int mod = 1e9 + 7;
 const int N = 1e5 + 5;
 
-vector<int> parent(N,-1);
-vector<bool> MST(N,false);
-vector<int> dis(N,INT_MAX);
-
-void Prims(){
-    priority_queue<P,vector<P>,greater<P>> q;
-    q.push({0,0});
-    parent[0]=-1;
-    dis[0]=0;
-    while(!q.empty()){
-        int u=q.top().S;
-        q.pop();
-        MST[u]=true;
-
-        for(auto to:graph[u]){
-            int cost=to.S;
-            int v=to.F;
-
-            if(MST[v]==false && cost<dis[v]){
-                dis[v]=cost;
-                q.push({dis[v],v});
-                parent[v]=u;
-            }
-        }
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+    	priority_queue<int, vector<int>, greater<int>> q;
+    	for(auto &x: nums){
+    		q.push(x);
+    		if(q.size()>k)
+    			q.pop();
+    	}
+    	return q.top();
     }
-}
+};
 
 void solve() {
 
-    return ;
+	int n;cin>>n;
+	vector<int> arr(n);
+	REP(i,0,n-1) cin>>arr[i];
+
+	int k;cin>>k;
+
+	auto ans=Solution().findKthLargest(arr, k);
+
+	cout<<ans;
+
+	return ;
 }
 
 int32_t main() {
 
-    ios_base:: sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
+	ios_base:: sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
 #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 #endif
 
-    //int t;cin>>t;while(t--)
-    solve();
+	//int t;cin>>t;while(t--)
+	solve();
 
-    return 0;
+	return 0;
 }

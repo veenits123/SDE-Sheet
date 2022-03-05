@@ -1,0 +1,131 @@
+/**
+ * तस्मात्सर्वेषु कालेषु मामनुस्मर युध्य च ।
+ * मय्यर्पितमनोबुद्धिर्मामेवैष्यस्यसंशय: ॥
+ * 
+ * Hare Kṛṣṇa Hare Kṛṣṇa
+ * Kṛṣṇa Kṛṣṇa Hare Hare
+ * Hare Rāma Hare Rāma
+ * Rāma Rāma Hare Hare
+**/
+
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <set>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include <iomanip>
+#include <cassert>
+#include <string>
+#include <cstring>
+#include <queue>
+#include <stack>
+#include <climits>
+using namespace std;
+
+#define int long long int
+#define ld long double
+#define F first
+#define S second
+#define P pair <int,int>
+#define vi vector <int>
+#define all(x) x.begin(),x.end()
+#define sz(x) (int)x.size()
+#define rep(i,a,b) for(int i=(int)a;i<=(int)b;i++)
+#define rev(i,a,b) for(int i=(int)a;i>=(int)b;i--)
+#define sp(x,y) fixed<<setprecision(y)<<x
+#define pb push_back
+#define endl '\n'
+const int mod = 1e9 + 7;
+const int N = 1e5 + 5;
+
+class Solution {
+public:
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
+        vector<bool> visited(n*n +1, false);
+        vector<int> graph(n*n + 1);
+        
+        bool changeDir = true;
+        int cell = 1;
+        for(int i=n-1; i>=0; i--){
+        	if(changeDir){
+        		for(int j=0; j<n; j++){
+        			graph[cell] = board[i][j];
+        			cell++;
+        		}
+        	}
+        	else{
+        		for(int j=n-1; j>=0; j--){
+        			graph[cell] = board[i][j];
+        			cell++;
+        		}
+        	}
+        	changeDir = !changeDir;
+        }
+        int ans = bfs(1, graph, visited);
+        return ans;
+    }
+    int bfs(int src, vector<int>& graph, vector<bool>& visited){
+    	int n = graph.size();
+    	int steps = 0;
+    	queue<int> q;
+    	q.push(src);
+    	visited[src] = true;
+    	while(!q.empty()){
+    		steps++;
+    		int upcomingMoves = q.size();
+    		for(int i=0; i<upcomingMoves; i++){
+    			int cur = q.front();
+    			q.pop();
+ 
+    			for(int moves=1; moves<=6; moves++){
+    				int nextMove = cur + moves;
+    				
+    				if(graph[nextMove] != -1){
+    					nextMove = graph[nextMove];
+    				}
+    				if(!visited[nextMove]){
+    					if(nextMove == n-1){
+    						return steps;
+    					}
+    					q.push(nextMove);
+    					visited[nextMove] = true;
+    				}
+    			}
+    		}
+    	}
+    	return -1;
+    }
+};
+
+void solve() {
+	
+	int n;cin>>n;
+	vector<vector<int>> board(n, vector<int>(n));
+	
+	rep(i,0,n-1)
+	rep(j,0,n-1)
+	cin>>board[i][j];
+	
+	cout<<Solution().snakesAndLadders(board);
+
+	return ;
+}
+
+int32_t main() {
+
+	ios_base:: sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
+#endif
+
+	//int t;cin>>t;while(t--)
+	solve();
+
+	return 0;
+}
